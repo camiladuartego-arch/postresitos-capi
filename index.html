@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>🍰 POSTRESITOS CAPI – Camila Duarte</title>
+
+  <style>
+    /* ============================
+       🎨 PALETA MORADO + BLANCO
+       ============================ */
+    :root{
+      --morado: #7b4bff;
+      --morado-oscuro: #5a30d1;
+      --fondo: #faf7ff;
+      --panel: #ffffff;
+      --texto: #2d2d2d;
+      --borde: #d6c8ff;
+      --rojo: #e34747;
+    }
+
+    body{
+      font-family: "Poppins", system-ui;
+      background: var(--fondo);
+      color: var(--texto);
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1{
+      color: var(--morado-oscuro);
+      margin-bottom: 20px;
+    }
+
+    /* Productos */
+    #productos{
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .producto{
+      background: var(--panel);
+      border: 2px solid var(--borde);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .producto img{
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .producto button{
+      background: var(--morado);
+      color: #fff;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    /* Carrito */
+    .carrito{
+      margin: 40px auto;
+      max-width: 500px;
+      text-align: left;
+      background: var(--panel);
+      border: 2px solid var(--borde);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    #lista-carrito li{
+      list-style:none;
+      background: #f3ecff;
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .vaciar{
+      background: var(--rojo);
+      color: #fff;
+      border: none;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #btn-finalizar{
+      background: var(--morado);
+      color: #fff;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🍽️ POSTRESITOS CAPI – Camila Duarte</h1>
+
+<!-- Filtro -->
+<label for="categoria"><strong>Filtrar por sabor:</strong></label>
+<select id="categoria">
+  <option value="todos">Todos</option>
+  <option value="frutas">Frutas</option>
+  <option value="dulces">Dulces</option>
+</select>
+
+<!-- Productos -->
+<div id="productos"></div>
+
+<!-- Carrito -->
+<div class="carrito">
+  <h2>🧾 Carrito de Compras (<span id="cantidad-carrito">0</span>)</h2>
+  <ul id="lista-carrito"></ul>
+
+  <p><strong>Subtotal:</strong> <span id="subtotal-text">$0</span></p>
+  <p><strong>Impuestos:</strong> <span id="impuestos-text">$0</span></p>
+  <p><strong>Total:</strong> <span id="total-text">$0</span></p>
+
+  <button id="btn-vaciar" class="vaciar">🧼 Vaciar Carrito</button>
+  <button id="btn-finalizar">✔ Finalizar Pedido</button>
+
+  <div id="paypal-button-container" style="margin-top:15px; display:none;"></div>
+</div>
+
+<!-- SDK PAYPAL -->
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+
+<script>
+/* ============================
+   PRODUCTOS
+============================ */
+const productos = [
+  { id:1, nombre:"Postresitos Capi",    precio:25, categoria:"dulces", img:"https://www.subeimg.growuz.com/ib/GJZ35cxBpg.jpg" },
+  { id:2, nombre:"Limón",               precio:18, categoria:"frutas", img:"https://www.subeimg.growuz.com/ib/yg5eh9TTjM.jpg" },
+  { id:3, nombre:"Maracuyá",            precio:30, categoria:"frutas", img:"https://www.subeimg.growuz.com/ib/yg5eh9TTjM.jpg" },
+  { id:4, nombre:"Chocolate",           precio:18, categoria:"dulces", img:"https://www.subeimg.growuz.com/ib/yg5eh9TTjM.jpg" },
+  { id:5, nombre:"Tres Leches",         precio:22, categoria:"dulces", img:"https://www.subeimg.growuz.com/ib/yg5eh9TTjM.jpg" }
+];
+
+let carrito = new Map();
+
+const el = {
+  productos: document.getElementById("productos"),
+  lista: document.getElementById("lista-carrito"),
+  subtotal: document.getElementById("subtotal-text"),
+  impuestos: document.getElementById("impuestos-text"),
+  total: document.getElementById("total-text"),
+  cantidad: document.getElementById("cantidad-carrito"),
+  filtro: document.getElementById("categoria"),
+  btnVaciar: document.getElementById("btn-vaciar"),
+  btnFinal: document.getElementById("btn-finalizar"),
+  paypal: document.getElementById("paypal-button-container")
+};
+
+const money = new Intl.NumberFormat("es-CO", { style:"currency", currency:"COP" });
+
+/* ============================
+   RENDER PRODUCTOS
+============================ */
+function renderProductos(lista){
+  el.productos.innerHTML = "";
+  lista.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "producto";
+    card.innerHTML = `
+      <img src="${p.img}">
+      <h3>${p.nombre}</h3>
+      <p><strong>${money.format(p.precio)}</strong></p>
+      <button data-add="${p.id}">Agregar</button>
+    `;
+    el.productos.appendChild(card);
+  });
+}
+
+/* ============================
+   FILTRO
+============================ */
+function filtrar(){
+  const cat = el.filtro.value;
+  const lista = cat === "todos"
+    ? productos
+    : productos.filter(p=>p.categoria === cat);
+  renderProductos(lista);
+}
+
+/* ============================
+   CARRITO
+============================ */
+function add(id){
+  const prod = productos.find(p => p.id === id);
+  const item = carrito.get(id);
+  if(item) item.cantidad++;
+  else carrito.set(id, {...prod, cantidad:1});
+  pintar();
+}
+
+function pintar(){
+  el.lista.innerHTML = "";
+  let subtotal = 0;
+  let totalItems = 0;
+
+  carrito.forEach(p =>{
+    subtotal += p.precio * p.cantidad;
+    totalItems += p.cantidad;
+    el.lista.innerHTML += `
+      <li>${p.nombre} x${p.cantidad} — ${money.format(p.precio * p.cantidad)}</li>
+    `;
+  });
+
+  const impuestos = subtotal * 0.00;
+  const total = subtotal + impuestos;
+
+  el.subtotal.textContent = money.format(subtotal);
+  el.impuestos.textContent = money.format(impuestos);
+  el.total.textContent = money.format(total);
+  el.cantidad.textContent = totalItems;
+
+  el.paypal.style.display = total > 0 ? "block":"none";
+}
+
+/* ============================
+   EVENTOS
+============================ */
+document.addEventListener("click", e=>{
+  if(e.target.dataset.add) add(+e.target.dataset.add);
+});
+
+el.btnVaciar.onclick = ()=>{
+  carrito.clear();
+  pintar();
+};
+
+el.filtro.onchange = filtrar;
+
+el.btnFinal.onclick = ()=>{
+  if(carrito.size===0) return alert("Carrito vacío");
+  alert("Pedido recibido. Gracias por comprar 💜");
+  carrito.clear();
+  pintar();
+};
+
+/* ============================
+   PAYPAL (solo si total > 0)
+============================ */
+paypal.Buttons({
+  createOrder: (data, actions)=>{
+    const total = Number(el.total.textContent.replace(/[^0-9,]/g,"").replace(",","."));
+    return actions.order.create({
+      purchase_units:[{ amount:{ value: total.toFixed(2) } }]
+    });
+  },
+  onApprove: (data, actions)=>{
+    return actions.order.capture().then(()=>{
+      alert("Pago aprobado 💜");
+      carrito.clear();
+      pintar();
+    });
+  }
+}).render("#paypal-button-container");
+
+/* Init */
+filtrar();
+pintar();
+</script>
+
+</body>
+</html>
