@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Camila Duarte · Servicios Virtuales Profesionales</title>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0a1a2f;
+      --accent: #1f6fe0;
+      --soft: #f2f6ff;
+      --border: #dce6f9;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+    }
+
+    header .logo {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    nav a {
+      margin-left: 1.2rem;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.95rem;
+    }
+
+    /* Mobile Menu */
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 720px) {
+      nav {
+        position: fixed;
+        top: 60px;
+        right: 0;
+        background: white;
+        width: 220px;
+        height: 0;
+        overflow: hidden;
+        transition: 0.3s;
+        border-left: 1px solid var(--border);
+      }
+      nav.open {
+        height: 220px;
+        padding: 1rem;
+      }
+      nav a {
+        display: block;
+        margin: 0.8rem 0;
+      }
+      .menu-btn {
+        display: block;
+      }
+    }
+
+    /* HERO */
+    .hero {
+      padding: 4rem 1.5rem;
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: auto;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.4rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0.4rem;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-secondary {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    /* Sections */
+    section {
+      padding: 3rem 1.5rem;
+      max-width: 900px;
+      margin: auto;
+    }
+    h2 {
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    /* Services */
+    .services-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .card {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      padding: 1.4rem;
+      border-radius: 8px;
+    }
+    .card h3 {
+      margin-top: 0;
+    }
+
+    /* FAQ */
+    details {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+
+    /* Modal */
+    .modal-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      z-index: 200;
+    }
+    .modal-bg.show {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      width: 100%;
+      max-width: 700px;
+      border-radius: 8px;
+      padding: 1rem;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 3rem;
+      background: var(--soft);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Camila Duarte</div>
+  <button class="menu-btn" id="menuBtn">☰</button>
+  <nav id="navMenu">
+    <a href="#servicios">Servicios</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <img src="https://via.placeholder.com/130" alt="Foto de Camila" style="border-radius:50%; margin-bottom:1.5rem;">
+
+    <h1>Servicios Virtuales Profesionales</h1>
+    <p>Apoyo administrativo, atención al cliente, ventas, redes sociales y traducción básica. Trabajo remoto con enfoque profesional, claridad y eficiencia.</p>
+
+    <a class="btn btn-primary" href="https://wa.me/573185733180" target="_blank">Contactar por WhatsApp</a>
+    <a class="btn btn-secondary" href="#servicios">Ver servicios</a>
+  </section>
+
+  <section id="servicios">
+    <h2>Servicios</h2>
+    <p>Soluciones virtuales confiables para pequeñas empresas, tiendas online y profesionales independientes.</p>
+
+    <div class="services-grid">
+
+      <div class="card">
+        <h3>Atención al cliente</h3>
+        <ul>
+          <li>Respuesta de mensajes</li>
+          <li>Manejo de WhatsApp Business</li>
+          <li>Gestión de solicitudes</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Asistencia virtual</h3>
+        <ul>
+          <li>Agenda y recordatorios</li>
+          <li>Organización de información</li>
+          <li>Apoyo administrativo</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Ventas y postventa</h3>
+        <ul>
+          <li>Seguimiento a clientes</li>
+          <li>Envío de catálogos</li>
+          <li>Registro de ventas</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Traducción básica</h3>
+        <ul>
+          <li>Español – Francés</li>
+          <li>Español – Alemán</li>
+          <li>Textos cortos</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Redes sociales</h3>
+        <ul>
+          <li>Respuesta a DMs</li>
+          <li>Publicación básica</li>
+          <li>Apoyo al community manager</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>Preguntas frecuentes</h2>
+
+    <details>
+      <summary>¿Trabajas tiempo completo o por horas?</summary>
+      Puedo trabajar por horas, por tareas específicas o por acuerdos mensuales.
+    </details>
+
+    <details>
+      <summary>¿Cómo realizamos la comunicación?</summary>
+      Podemos coordinarnos por WhatsApp, correo o videollamada según lo necesites.
+    </details>
+
+    <details>
+      <summary>¿Ofreces contratos o acuerdos de servicio?</summary>
+      Sí, puedo manejar acuerdos básicos de prestación de servicios si lo requieres.
+    </details>
+  </section>
+
+  <!-- CONTACTO CON FORMULARIO EN MODAL -->
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <p>Cuéntame qué necesitas y te responderé lo antes posible.</p>
+
+    <a class="btn btn-primary" href="#" id="openModal">Enviar mensaje</a>
+
+    <div style="margin-top:1.5rem;">
+      <a class="btn btn-secondary" href="mailto:camiladurtegomez@gmail.com">Enviar correo</a>
+      <a class="btn btn-primary" href="https://wa.me/573185733180" target="_blank">WhatsApp directo</a>
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal-bg">
+    <div class="modal-content">
+      <button id="closeModal" class="modal-close">✕</button>
+
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdiNEToykr55I6H2OX9CcQAr6CUrz6-BrRr86mCZ9HKqDIQHg/viewform?embedded=true"
+        width="100%" height="700" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p><strong>Camila Duarte</strong></p>
+  <p>camiladurtegomez@gmail.com · Disponible para trabajos 100% remotos</p>
+</footer>
+
+<script>
+  // Menú Responsive
+  const menuBtn = document.getElementById("menuBtn");
+  const navMenu = document.getElementById("navMenu");
+  menuBtn.addEventListener("click", () => {
+    navMenu.classList.toggle("open");
+  });
+
+  // Scroll suave
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        window.scrollTo({
+          top: target.offsetTop - 60,
+          behavior: "smooth"
+        });
+        navMenu.classList.remove("open");
+      }
+    });
+  });
+
+  // Modal del Google Form
+  const modal = document.getElementById("modal");
+  const openModal = document.getElementById("openModal");
+  const closeModal = document.getElementById("closeModal");
+
+  openModal.addEventListener("click", (e) => {
+    e.preventDefault();
+    modal.classList.add("show");
+  });
+
+  closeModal.addEventListener("click", () => {
+    modal.classList.remove("show");
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("show");
+  });
+</script>
+
+</body>
+</html>
